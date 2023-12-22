@@ -1,0 +1,15 @@
+---
+import { getCollection } from "astro:content";
+
+import BaseLayout from "../../layouts/BaseLayout.astro";
+//const allPosts = await Astro.glob("../../pages/posts/*.md");
+const allPosts = await getCollection("posts");
+const tags = [...new Set(allPosts.filter(post => post.data.tags).map(post => post.data.tags).flat())];
+const pageTitle = "Tags";
+---
+
+<BaseLayout pageTitle={pageTitle}>
+    <ul>
+        {tags.map(tag => <li><a href={`/tags/${tag}`}>{tag}</a></li>)}
+    </ul>
+</BaseLayout>
