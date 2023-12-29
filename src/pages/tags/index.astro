@@ -1,15 +1,25 @@
 ---
 import { getCollection } from "astro:content";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import Layout from "@layouts/Layout.astro";
+import Main from "@layouts/Main.astro";
+import Tag from "@components/Tag.astro";
+import getUniqueTags from "@utils/getUniqueTags";
+import { SITE } from "@config";
 
-import BaseLayout from "../../layouts/BaseLayout.astro";
-//const allPosts = await Astro.glob("../../pages/posts/*.md");
-const allPosts = await getCollection("posts");
-const tags = [...new Set(allPosts.filter(post => post.data.tags).map(post => post.data.tags).flat())];
-const pageTitle = "Tags";
+const posts = await getCollection("blog");
+
+let tags = getUniqueTags(posts);
+console.log(tags);
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<Layout title={`Tags | ${SITE.title}`}>
+  <Header activeNav="tags" />
+  <Main pageTitle="Tags" pageDesc="All the tags used in posts.">
     <ul>
-        {tags.map(tag => <li><a href={`/tags/${tag}`}>{tag}</a></li>)}
+      {tags.map(({ tag }) => <Tag name={tag} size="lg" />)}
     </ul>
-</BaseLayout>
+  </Main>
+  <Footer />
+</Layout>
