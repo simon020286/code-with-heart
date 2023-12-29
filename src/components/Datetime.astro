@@ -44,9 +44,9 @@ const myDatetime = new Date(modDatetime ? modDatetime : pubDatetime);
         <span class="sr-only">Published:</span>
       )}
       <span class={`italic ${size === "sm" ? "text-sm" : "text-base"}`}>
-        <time dateTime={myDatetime.toISOString()}>{date}</time>
+        <time datetime={myDatetime.toISOString()}>{date}</time>
         <span aria-hidden="true"> | </span>
-        <span className="sr-only">&nbsp;at&nbsp;</span>
-        <span className="text-nowrap">{time}</span>
+        <span class="sr-only">&nbsp;at&nbsp;</span>
+        <span class="text-nowrap">{time}</span>
       </span>
     </div>

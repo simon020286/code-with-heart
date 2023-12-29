@@ -9,15 +9,15 @@ import LinkButton from "@components/LinkButton.astro";
 import type { CollectionEntry } from "astro:content";
 
 export interface Props {
-  pageNum: number;
+  currentPage: number;
   totalPages: number;
-  posts: CollectionEntry<"blog">[];
+  paginatedPosts: CollectionEntry<"blog">[];
 }
 
-const { pageNum, totalPages, posts } = Astro.props;
+const { currentPage, totalPages, paginatedPosts } = Astro.props;
 
-const prev = pageNum > 1 ? "" : "disabled";
-const next = pageNum < totalPages ? "" : "disabled";
+const prev = currentPage > 1 ? "" : "disabled";
+const next = currentPage < totalPages ? "" : "disabled";
 ---
 
 <Layout title={`Posts | ${SITE.title}`}>
@@ -25,7 +25,7 @@ const next = pageNum < totalPages ? "" : "disabled";
   <Main pageTitle="Posts" pageDesc="All the articles I've posted.">
     <ul>
       {
-        posts.map(({ data, slug }) => (
+        paginatedPosts.map(({ data, slug }) => (
           <Card href={`/posts/${slug}`} frontmatter={data} />
         ))
       }
@@ -37,7 +37,7 @@ const next = pageNum < totalPages ? "" : "disabled";
       <nav class="pagination-wrapper" aria-label="Pagination">
         <LinkButton
           disabled={prev === "disabled"}
-          href={`/posts${pageNum - 1 !== 1 ? "/" + (pageNum - 1) : ""}`}
+          href={`/posts${currentPage - 1 !== 1 ? "/" + (currentPage - 1) : ""}`}
           className={`mr-4 select-none ${prev}`}
           ariaLabel="Previous"
         >
@@ -48,7 +48,7 @@ const next = pageNum < totalPages ? "" : "disabled";
         </LinkButton>
         <LinkButton
           disabled={next === "disabled"}
-          href={`/posts/${pageNum + 1}`}
+          href={`/posts/${currentPage + 1}`}
           className={`ml-4 select-none ${next}`}
           ariaLabel="Next"
         >

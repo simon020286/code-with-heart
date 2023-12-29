@@ -1,6 +1,6 @@
 ---
 import { slugifyStr } from "@utils/slugify";
-//import Datetime from "./Datetime.astro";
+import Datetime from "./Datetime.astro";
 import type { CollectionEntry } from "astro:content";
 
 export interface Props {
@@ -28,6 +28,6 @@ const headerProps = {
           <h3 {...headerProps}>{title}</h3>
         )}
       </a>
-      <!-- <Datetime pubDatetime={pubDatetime} modDatetime={modDatetime} /> -->
+      <Datetime pubDatetime={pubDatetime} modDatetime={modDatetime} />
       <p>{description}</p>
     </li>
