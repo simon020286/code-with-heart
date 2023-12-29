@@ -10,4 +10,6 @@ export default defineConfig({
     })
   ],
   scopedStyleStrategy: "where",
+  site: "https://simon020286.github.io/",
+  base: "/code-with-heart"
 });
