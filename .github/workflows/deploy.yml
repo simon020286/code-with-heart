@@ -26,13 +26,13 @@ jobs:
           # path: . # The root location of your Astro project inside the repository. (optional)
           # node-version: 18 # The specific version of Node that should be used to build your site. Defaults to 18. (optional)
           # package-manager: pnpm@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
-      - name: Pushes to another repository
-        uses: cpina/github-action-push-to-another-repository@main
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v2
         env:
-          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+          ACTIONS_DEPLOY_KEY: ${{ secrets.API_TOKEN_GITHUB }}
+          EXTERNAL_REPOSITORY: simon020286/simon020286.github.io
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: ./dist
         with:
-          source-directory: 'dist'
-          destination-github-username: 'simon020286'
-          destination-repository-name: 'simon020286.github.io'
-          user-email: codewithheart@email.dev
-          target-branch: gh-pages
+          emptyCommits: false
+          commitMessage: ${{ github.event.head_commit.message }}
