@@ -38,6 +38,6 @@ jobs:
         with:
           source-directory: 'dist'
           destination-github-username: 'simon020286'
-          destination-repository-name: 'simon020286'
+          destination-repository-name: 'simon020286.github.io'
           user-email: carles3@pina.cat
           target-branch: gh-pages
