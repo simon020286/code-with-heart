@@ -27,12 +27,10 @@ jobs:
           # node-version: 18 # The specific version of Node that should be used to build your site. Defaults to 18. (optional)
           # package-manager: pnpm@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v2
-        env:
-          ACTIONS_DEPLOY_KEY: ${{ secrets.API_TOKEN_GITHUB }}
-          EXTERNAL_REPOSITORY: simon020286/simon020286.github.io
-          PUBLISH_BRANCH: gh-pages
-          PUBLISH_DIR: ./dist
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          emptyCommits: false
-          commitMessage: ${{ github.event.head_commit.message }}
+          github_token: ${{ secrets.API_TOKEN_GITHUB }}
+          publish_dir: ./dist
+          external_repository: simon020286/simon020286.github.io
+          publish_branch: gh-pages
+          commit_message: ${{ github.event.head_commit.message }}
