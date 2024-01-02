@@ -10,5 +10,8 @@ export default defineConfig({
     })
   ],
   scopedStyleStrategy: "where",
+  redirects: {
+    "/": "/posts"
+  },
   site: "https://simon020286.github.io/"
 });
