@@ -4,8 +4,82 @@ import Main from "@layouts/Main.astro";
 import Header from "@components/Header.astro";
 const pageTitle = "Tools | Age";
 ---
+
 <Layout title={pageTitle}>
- <Header activeNav="tools"/>
- <Main pageTitle={pageTitle}>
-   
- </Main>
+    <Header activeNav="tools" />
+    <Main pageTitle={pageTitle}>
+        <input type="text" id="password" />
+        <input type="file" id="inputFile" />
+        <button onclick="cryptFile">Crypt</button>
+    </Main>
+    <script>
+        const response = await fetch("/crypto_wasm_bg.wasm");
+        const buffer = await response.arrayBuffer();
+        const module = new WebAssembly.Module(buffer);
+        const instance = new WebAssembly.Instance(module);
+
+        function cryptFile() {
+            const file = (document?.getElementById("inputFile") as any)
+                ?.files[0];
+            const password = (
+                document.getElementById("password") as HTMLInputElement
+            )?.value;
+            const reader = new FileReader();
+            reader.readAsArrayBuffer(file);
+            reader.onload = function () {
+                const buffer = new Uint8Array(reader.result as any);
+                const result = (instance.exports as any).encrypt(
+                    password,
+                    buffer,
+                );
+                if (result === undefined) {
+                    alert("errore");
+                } else if (typeof result === "string") {
+                    alert(result);
+                } else {
+                    const fileName = file.name + ".age";
+                    console.log(`Encrypted ${fileName}`);
+                    downloadBlob(result, `${fileName}`);
+                }
+            };
+        }
+
+        function decryptFile() {
+            const file = (document?.getElementById("inputFile") as any)
+                ?.files[0];
+            const password = (
+                document.getElementById("password") as HTMLInputElement
+            )?.value;
+            const reader = new FileReader();
+            reader.readAsArrayBuffer(file);
+            reader.onload = function () {
+                const buffer = new Uint8Array(reader.result as any);
+                const result = (instance.exports as any).decrypt("password", buffer);
+                if (result === undefined) {
+                    alert("errore");
+                } else if (typeof result === "string") {
+                    alert(result);
+                } else {
+                    const fileName = file.name + ".age";
+                    console.log(`Encrypted ${fileName}`);
+                    downloadBlob(result, `${fileName}`);
+                }
+            };
+        }
+
+        const downloadBlob = (data: Uint8Array, fileName: string) => {
+            const blob = new Blob([data], {
+                type: "application/octet-stream",
+            });
+            const url = window.URL.createObjectURL(blob);
+            const element = document.createElement("a");
+            element.href = url;
+            element.download = fileName;
+            element.style.display = "none";
+            document.body.appendChild(element);
+            element.click();
+            element.remove();
+            setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+        };
+    </script>
+</Layout>
