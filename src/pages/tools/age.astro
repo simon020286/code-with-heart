@@ -10,25 +10,28 @@ const pageTitle = "Tools | Age";
     <Main pageTitle={pageTitle}>
         <input type="text" id="password" />
         <input type="file" id="inputFile" />
-        <button onclick="cryptFile">Crypt</button>
+        <button id="buttonCrypt">Crypt</button>
+        <button id="buttonDecrypt">Decrypt</button>
     </Main>
-    <script>
-        const response = await fetch("/crypto_wasm_bg.wasm");
-        const buffer = await response.arrayBuffer();
-        const module = new WebAssembly.Module(buffer);
-        const instance = new WebAssembly.Instance(module);
-
-        function cryptFile() {
-            const file = (document?.getElementById("inputFile") as any)
+    <script type="module" is:inline>
+      import init, { encrypt, decrypt } from "/crypto_wasm.js";
+      init().then(() => {
+        console.log("Wasm loaded")
+      });
+      const buttonCrypt = document.getElementById("buttonCrypt");
+      buttonCrypt.addEventListener("click", cryptFile);
+      
+      const buttonDecrypt = document.getElementById("buttonDecrypt");
+      buttonDecrypt.addEventListener("click", decryptFile);
+      function cryptFile() {
+            const file = document?.getElementById("inputFile")
                 ?.files[0];
-            const password = (
-                document.getElementById("password") as HTMLInputElement
-            )?.value;
+            const password = document.getElementById("password")?.value;
             const reader = new FileReader();
             reader.readAsArrayBuffer(file);
             reader.onload = function () {
-                const buffer = new Uint8Array(reader.result as any);
-                const result = (instance.exports as any).encrypt(
+                const buffer = new Uint8Array(reader.result);
+                const result = encrypt(
                     password,
                     buffer,
                 );
@@ -43,18 +46,15 @@ const pageTitle = "Tools | Age";
                 }
             };
         }
-
+        
         function decryptFile() {
-            const file = (document?.getElementById("inputFile") as any)
-                ?.files[0];
-            const password = (
-                document.getElementById("password") as HTMLInputElement
-            )?.value;
+            const file = document?.getElementById("inputFile")?.files[0];
+            const password = document.getElementById("password")?.value;
             const reader = new FileReader();
             reader.readAsArrayBuffer(file);
             reader.onload = function () {
-                const buffer = new Uint8Array(reader.result as any);
-                const result = (instance.exports as any).decrypt("password", buffer);
+                const buffer = new Uint8Array(reader.result);
+                const result = decrypt("password", buffer);
                 if (result === undefined) {
                     alert("errore");
                 } else if (typeof result === "string") {
@@ -66,9 +66,11 @@ const pageTitle = "Tools | Age";
                 }
             };
         }
+        
+        const downloadBlob = (data, fileName) => {
 
-        const downloadBlob = (data: Uint8Array, fileName: string) => {
             const blob = new Blob([data], {
+
                 type: "application/octet-stream",
             });
             const url = window.URL.createObjectURL(blob);
@@ -81,5 +83,12 @@ const pageTitle = "Tools | Age";
             element.remove();
             setTimeout(() => window.URL.revokeObjectURL(url), 1000);
         };
+    </script>
+    <script>
+        
+
+        
+
+        
     </script>
 </Layout>
