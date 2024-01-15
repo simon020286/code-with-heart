@@ -8,10 +8,20 @@ const pageTitle = "Tools | Age";
 <Layout title={pageTitle}>
     <Header activeNav="tools" />
     <Main pageTitle={pageTitle}>
+      <div class="flex flex-wrap gap-5 justify-center">
+        <div class="flex flex-wrap items-center gap-3">
+          <label>Password</label>
         <input type="text" id="password" />
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <label>File</label>
         <input type="file" id="inputFile" />
-        <button id="buttonCrypt">Crypt</button>
-        <button id="buttonDecrypt">Decrypt</button>
+        </div>
+        <div>
+          <button id="buttonCrypt" class="btn">Crypt</button>
+          <button id="buttonDecrypt" class="btn">Decrypt</button>
+        </div>
+      </div>
     </Main>
     <script type="module" is:inline>
       import init, { encrypt, decrypt } from "/crypto_wasm.js";

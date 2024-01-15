@@ -126,6 +126,14 @@
   pre > code {
     white-space: pre;
   }
+  
+  input {
+    @apply border-2 rounded-lg p-2;
+  }
+  
+  .btn {
+    @apply border-2 rounded-lg p-2;
+  }
 }
 
 @layer components {
