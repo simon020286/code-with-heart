@@ -8,43 +8,43 @@ const pageTitle = "Tools | Age";
 <Layout title={pageTitle}>
     <Header activeNav="tools" />
     <Main pageTitle={pageTitle}>
-      <div class="flex flex-wrap gap-5 justify-center">
-        <div class="flex flex-wrap items-center gap-3">
-          <label>Password</label>
-        <input type="text" id="password" />
+        <div class="flex flex-wrap gap-5 flex-col items-center sm:items-start">
+            <div class="flex flex-wrap items-center gap-3 flex-col sm:flex-row">
+                <label>Password</label>
+                <input type="text" id="inputPassword" disabled/>
+            </div>
+            <div class="flex flex-wrap items-center gap-3 flex-col sm:flex-row">
+                <label>File</label>
+                <input type="file" id="inputFile" disabled/>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+                <button id="buttonCrypt" class="btn" disabled>Crypt</button>
+                <button id="buttonDecrypt" class="btn" disabled>Decrypt</button>
+            </div>
         </div>
-        <div class="flex flex-wrap items-center gap-3">
-          <label>File</label>
-        <input type="file" id="inputFile" />
-        </div>
-        <div>
-          <button id="buttonCrypt" class="btn">Crypt</button>
-          <button id="buttonDecrypt" class="btn">Decrypt</button>
-        </div>
-      </div>
     </Main>
     <script type="module" is:inline>
-      import init, { encrypt, decrypt } from "/crypto_wasm.js";
-      init().then(() => {
-        console.log("Wasm loaded")
-      });
-      const buttonCrypt = document.getElementById("buttonCrypt");
-      buttonCrypt.addEventListener("click", cryptFile);
-      
-      const buttonDecrypt = document.getElementById("buttonDecrypt");
-      buttonDecrypt.addEventListener("click", decryptFile);
-      function cryptFile() {
-            const file = document?.getElementById("inputFile")
-                ?.files[0];
+        import init, { encrypt, decrypt } from "/crypto_wasm.js";
+        const buttonCrypt = document.getElementById("buttonCrypt");
+        const buttonDecrypt = document.getElementById("buttonDecrypt");
+        const inputPassword = document.getElementById("inputPassword");
+        const inputFile = document.getElementById("inputFile");
+        buttonCrypt.addEventListener("click", cryptFile);
+        buttonDecrypt.addEventListener("click", decryptFile);
+
+        init().then(() => {
+            inputPassword.disabled = false;
+            inputFile.disabled = false;
+        });
+
+        function cryptFile() {
+            const file = document?.getElementById("inputFile")?.files[0];
             const password = document.getElementById("password")?.value;
             const reader = new FileReader();
             reader.readAsArrayBuffer(file);
             reader.onload = function () {
                 const buffer = new Uint8Array(reader.result);
-                const result = encrypt(
-                    password,
-                    buffer,
-                );
+                const result = encrypt(password, buffer);
                 if (result === undefined) {
                     alert("errore");
                 } else if (typeof result === "string") {
@@ -56,7 +56,7 @@ const pageTitle = "Tools | Age";
                 }
             };
         }
-        
+
         function decryptFile() {
             const file = document?.getElementById("inputFile")?.files[0];
             const password = document.getElementById("password")?.value;
@@ -76,11 +76,9 @@ const pageTitle = "Tools | Age";
                 }
             };
         }
-        
+
         const downloadBlob = (data, fileName) => {
-
             const blob = new Blob([data], {
-
                 type: "application/octet-stream",
             });
             const url = window.URL.createObjectURL(blob);
@@ -94,11 +92,5 @@ const pageTitle = "Tools | Age";
             setTimeout(() => window.URL.revokeObjectURL(url), 1000);
         };
     </script>
-    <script>
-        
-
-        
-
-        
-    </script>
+    <script></script>
 </Layout>

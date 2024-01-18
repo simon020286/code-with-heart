@@ -128,11 +128,11 @@
   }
   
   input {
-    @apply border-2 rounded-lg p-2;
+    @apply border-2 rounded-lg p-2 bg-transparent text-current disabled:opacity-50;
   }
   
   .btn {
-    @apply border-2 rounded-lg p-2;
+    @apply border-2 rounded-lg p-2 disabled:opacity-50;
   }
 }
 
