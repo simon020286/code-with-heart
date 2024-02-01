@@ -1,6 +1,7 @@
 ---
 import { slugifyStr } from "@utils/slugify";
 import Datetime from "./Datetime.astro";
+import Image from "./Image.astro";
 import type { CollectionEntry } from "astro:content";
 
 export interface Props {
@@ -9,7 +10,7 @@ export interface Props {
   secHeading?: boolean;
 }
 const { frontmatter, href, secHeading } = Astro.props;
-const { title, pubDatetime, modDatetime, description } = frontmatter;
+const { title, pubDatetime, modDatetime, description, image } = frontmatter;
 
 const headerProps = {
     style: { viewTransitionName: slugifyStr(title) },
@@ -29,5 +30,6 @@ const headerProps = {
         )}
       </a>
       <Datetime pubDatetime={pubDatetime} modDatetime={modDatetime} />
+      <Image image={image}/>
       <p>{description}</p>
     </li>
