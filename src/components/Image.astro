@@ -1,0 +1,14 @@
+---
+const { image } = Astro.props;
+---
+{ image?.theme &&
+<picture>
+  <source
+    srcset={image.theme.dark}
+    media="(prefers-color-scheme: dark)"
+  />
+  <img
+    src={image.theme.light}
+    alt="Browser with large and small images of a coffee cup and plants"
+  />
+</picture>}

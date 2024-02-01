@@ -12,10 +12,14 @@ tags:
   - web framework
   - static site generation
 ogImage: https://astro.build/assets/press/astro-logo-dark.svg
+image:
+  theme: 
+    light: https://astro.build/assets/press/astro-logo-dark.svg
+    dark: https://astro.build/assets/press/astro-logo-light.svg
 description:
   Installazione e introduzione a Astro.
 ---
-![Astro logo](https://astro.build/assets/press/astro-logo-dark.svg)
+
 Se sei alla ricerca di un framework web che ti permetta di creare siti web moderni, performanti e personalizzabili, allora devi assolutamente conoscere [Astro](https://astro.build/).  
 È un progetto open source creato dal team di Vercel, la società dietro le popolari piattaforme di hosting e deployment web Next.js e Vercel.
 Astro è un generatore di siti statici che si basa su una nuova architettura, chiamata Islands, che ottimizza le prestazioni del sito web, riducendo al minimo il codice JavaScript inviato al browser.  
@@ -31,7 +35,7 @@ npm create astro@latest
 ```
 
 Per prima cosa viene chiesto in quale cartella creare il progetto, di default ne viene gia proposta una.
-Poi viene richiesto come crearlo, a me piace avere il pieno controllo quindi lo creiamo partendo da zero, per fere questo selezioniamo Empty.  
+Poi viene richiesto come crearlo, a me piace avere il pieno controllo quindi lo creiamo partendo da zero, per fare questo selezioniamo Empty.  
 Procediamo poi con l'installazione delle dipendenze, se non lo facciamo ora ricordiamoci di farlo terminata la creazione.
 Successivamente bisogna scegliere se utilizzare typescript al posto di javascript puro, ovviamente selezioniamo yes, così da avere più controllo su quello che scriviamo. Subito dopo lasciamo pure il valore di default per la modalità strict di typescript.  
 Ultimo passaggio, se vogliamo verrà inizializzato un repo git con già `.gitignore` valorizzato correttamente per escludere file e cartelle utilizzate da Astro.  
