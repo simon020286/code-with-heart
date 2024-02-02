@@ -2,24 +2,29 @@
 import Layout from "@layouts/Layout.astro";
 import Main from "@layouts/Main.astro";
 import Header from "@components/Header.astro";
-const pageTitle = "Tools | Age";
+import GroupInput from "@components/form/GroupInput.astro";
+const pageTitle = "Tools | Rage";
 ---
 
 <Layout title={pageTitle}>
     <Header activeNav="tools" />
     <Main pageTitle={pageTitle}>
-        <div class="flex flex-wrap gap-5 flex-col items-center sm:items-start">
-            <div class="flex flex-wrap items-center gap-3 flex-col sm:flex-row">
-                <label>Password</label>
-                <input type="text" id="inputPassword" disabled/>
-            </div>
-            <div class="flex flex-wrap items-center gap-3 flex-col sm:flex-row">
-                <label>File</label>
-                <input type="file" id="inputFile" disabled/>
-            </div>
-            <div class="flex flex-wrap items-center gap-3">
-                <button id="buttonCrypt" class="btn" disabled>Crypt</button>
-                <button id="buttonDecrypt" class="btn" disabled>Decrypt</button>
+        <div class="flex flex-col gap-5">
+            <p>
+                Rage is a simple, modern, and secure file encryption tool, using the age format.<br>
+                <a href="https://github.com/str4d/rage">GitHub repo</a>
+            </p>
+            <GroupInput label="Password">
+                <input type="text" class="col-span-4" id="inputPassword" disabled />
+            </GroupInput>
+            <GroupInput label="File">
+                <input type="file" class="col-span-4" id="inputFile" disabled />
+            </GroupInput>
+            <div class="flex flex-wrap gap-5 flex-col items-center">
+                <div class="flex flex-wrap items-center gap-3">
+                    <button id="buttonCrypt" class="btn" disabled>Crypt</button>
+                    <button id="buttonDecrypt" class="btn" disabled>Decrypt</button>
+                </div>
             </div>
         </div>
     </Main>
@@ -31,6 +36,8 @@ const pageTitle = "Tools | Age";
         const inputFile = document.getElementById("inputFile");
         buttonCrypt.addEventListener("click", cryptFile);
         buttonDecrypt.addEventListener("click", decryptFile);
+        inputFile.addEventListener("change", inputChanged);
+        inputPassword.addEventListener("input", inputChanged);
 
         init().then(() => {
             inputPassword.disabled = false;
@@ -38,41 +45,52 @@ const pageTitle = "Tools | Age";
         });
 
         function cryptFile() {
-            const file = document?.getElementById("inputFile")?.files[0];
-            const password = document.getElementById("password")?.value;
+            const file = inputFile.files[0];
+            const password = inputPassword.value;
             const reader = new FileReader();
             reader.readAsArrayBuffer(file);
             reader.onload = function () {
-                const buffer = new Uint8Array(reader.result);
-                const result = encrypt(password, buffer);
-                if (result === undefined) {
-                    alert("errore");
-                } else if (typeof result === "string") {
-                    alert(result);
-                } else {
-                    const fileName = file.name + ".age";
-                    console.log(`Encrypted ${fileName}`);
-                    downloadBlob(result, `${fileName}`);
+                try {
+                    const buffer = new Uint8Array(reader.result);
+                    const result = encrypt(password, buffer);
+                    if (result === undefined) {
+                        alert("errore");
+                    } else if (typeof result === "string") {
+                        alert(result);
+                    } else {
+                        const fileName = file.name + ".age";
+                        downloadBlob(result, `${fileName}`);
+                    }
+                } catch (error) {}
+                finally {
+                    disableButtons(false);
                 }
             };
         }
 
         function decryptFile() {
-            const file = document?.getElementById("inputFile")?.files[0];
-            const password = document.getElementById("password")?.value;
+            disableButtons(true);
+            const file = inputFile.files[0];
+            const password = inputPassword.value;
             const reader = new FileReader();
             reader.readAsArrayBuffer(file);
             reader.onload = function () {
-                const buffer = new Uint8Array(reader.result);
-                const result = decrypt("password", buffer);
-                if (result === undefined) {
-                    alert("errore");
-                } else if (typeof result === "string") {
-                    alert(result);
-                } else {
-                    const fileName = file.name + ".age";
-                    console.log(`Encrypted ${fileName}`);
-                    downloadBlob(result, `${fileName}`);
+                try {
+                    const buffer = new Uint8Array(reader.result);
+                    const result = decrypt(password, buffer);
+                    if (result === undefined) {
+                        alert("errore");
+                    } else if (typeof result === "string") {
+                        alert(result);
+                    } else {
+                        const filename = file.name.endsWith(".age")
+                            ? file.name.substring(0, file.name.length - 4)
+                            : file.name;
+                        downloadBlob(result, `${filename}`);
+                    }
+                } catch (error) {
+                } finally {
+                    disableButtons(false);
                 }
             };
         }
@@ -91,6 +109,19 @@ const pageTitle = "Tools | Age";
             element.remove();
             setTimeout(() => window.URL.revokeObjectURL(url), 1000);
         };
+
+        function inputChanged() {
+            if (inputPassword.value && inputFile.value) {
+                disableButtons(false);
+            } else {
+                disableButtons(true);
+            }
+        }
+
+        function disableButtons(disable) {
+            buttonCrypt.disabled = disable;
+            buttonDecrypt.disabled = disable;
+        }
     </script>
     <script></script>
 </Layout>

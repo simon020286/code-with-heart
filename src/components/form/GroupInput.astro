@@ -1,0 +1,12 @@
+---
+type Props = {
+    label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<div class="grid grid-cols-1 sm:grid-cols-6 items-center">
+    <label>{label}</label>
+    <slot />
+</div>
