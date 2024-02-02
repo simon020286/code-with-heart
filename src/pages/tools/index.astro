@@ -1,0 +1,13 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Main from "@layouts/Main.astro";
+import Header from "@components/Header.astro";
+const pageTitle = "Tools";
+---
+<Layout title={pageTitle}>
+ <Header activeNav="tools"/>
+ <Main pageTitle={pageTitle}>
+   <ul>
+     <li><a href="/tools/age"><strong>Rage</strong><br>Is a simple, modern, and secure file encryption tool, using the age format</a></li>
+   </ul>
+ </Main>
